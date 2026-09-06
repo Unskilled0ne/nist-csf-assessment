@@ -1,0 +1,36 @@
+{
+  "framework": "NIST Cybersecurity Framework (CSF) 2.0",
+  "version": "2.0",
+  "functions": [
+    {
+      "id": "GV",
+      "name": "GOVERN",
+      "description": "Establish and monitor the organization's cybersecurity risk management strategy, expectations, and policy."
+    },
+    {
+      "id": "ID",
+      "name": "IDENTIFY",
+      "description": "Determine the current cybersecurity risk to the organization, assets, individuals, and third parties."
+    },
+    {
+      "id": "PR",
+      "name": "PROTECT",
+      "description": "Use safeguards to prevent or reduce cybersecurity risks to assets and data."
+    },
+    {
+      "id": "DE",
+      "name": "DETECT",
+      "description": "Find and analyze possible cybersecurity attacks and compromises."
+    },
+    {
+      "id": "RS",
+      "name": "RESPOND",
+      "description": "Take action regarding a detected cybersecurity incident."
+    },
+    {
+      "id": "RC",
+      "name": "RECOVER",
+      "description": "Restore assets and operations that were impacted by a cybersecurity incident."
+    }
+  ]
+}

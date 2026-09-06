@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIST CSF 2.0 GRC Assessment Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+    </style>
+</head>
+<body class="bg-[#0b0f19] text-gray-200 min-h-screen">
+    <!-- Navbar -->
+    <header class="border-b border-gray-800 bg-[#111827]/80 backdrop-blur sticky top-0 z-50 px-6 py-4 flex items-center justify-between">
+        <div class="flex items-center space-x-3">
+            <span class="px-2.5 py-1 rounded bg-blue-950 border border-blue-800 text-blue-400 font-mono text-xs font-bold">NIST CSF 2.0</span>
+            <h1 class="text-lg font-bold text-white tracking-wide">Enterprise GRC Maturity & Risk Matrix</h1>
+        </div>
+        <div class="text-xs font-mono text-gray-400">
+            Target: <span class="text-cyan-400 font-semibold">Apex Financial Technologies S.A.</span>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto p-6 space-y-6">
+        <!-- Top Metrics Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-5">
+            <div class="bg-[#111827] border border-gray-800 rounded-xl p-5">
+                <div class="text-xs uppercase text-gray-400 font-mono">Current Overall Maturity</div>
+                <div id="metric-current" class="text-3xl font-bold text-amber-400 font-mono mt-2">-- / 4.0</div>
+                <div class="text-xs text-gray-500 mt-1">Tier 2: Risk-Informed</div>
+            </div>
+            <div class="bg-[#111827] border border-gray-800 rounded-xl p-5">
+                <div class="text-xs uppercase text-gray-400 font-mono">Target Framework Tier</div>
+                <div id="metric-target" class="text-3xl font-bold text-emerald-400 font-mono mt-2">-- / 4.0</div>
+                <div class="text-xs text-gray-500 mt-1">Tier 3-4: Repeatable / Adaptive</div>
+            </div>
+            <div class="bg-[#111827] border border-gray-800 rounded-xl p-5">
+                <div class="text-xs uppercase text-gray-400 font-mono">Identified Maturity Gap</div>
+                <div id="metric-gap" class="text-3xl font-bold text-cyan-400 font-mono mt-2">+--</div>
+                <div class="text-xs text-gray-500 mt-1">Target vs. Current Delta</div>
+            </div>
+            <div class="bg-[#111827] border border-gray-800 rounded-xl p-5">
+                <div class="text-xs uppercase text-gray-400 font-mono">Total POAM Budget</div>
+                <div id="metric-budget" class="text-3xl font-bold text-rose-400 font-mono mt-2">€--</div>
+                <div class="text-xs text-gray-500 mt-1">Remediation Capital Allocated</div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Radar Chart: Function Maturity -->
+            <div class="bg-[#111827] border border-gray-800 rounded-xl p-5">
+                <h3 class="text-sm font-semibold text-gray-200 font-mono mb-4 flex items-center justify-between">
+                    <span>CSF 2.0 FUNCTION MATURITY PROFILE</span>
+                    <span class="text-xs text-cyan-400">Current vs. Target Tier</span>
+                </h3>
+                <div class="h-72">
+                    <canvas id="radarChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Bar Chart: Phased Investment Allocation -->
+            <div class="bg-[#111827] border border-gray-800 rounded-xl p-5">
+                <h3 class="text-sm font-semibold text-gray-200 font-mono mb-4 flex items-center justify-between">
+                    <span>REMEDIATION BUDGET BY WORKSTREAM</span>
+                    <span class="text-xs text-emerald-400">Owner Allocation (€)</span>
+                </h3>
+                <div class="h-72">
+                    <canvas id="budgetChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prioritized Risk & POAM Roadmap Table -->
+        <div class="bg-[#111827] border border-gray-800 rounded-xl p-5">
+            <div class="flex items-center justify-between pb-4 border-b border-gray-800">
+                <div>
+                    <h3 class="text-sm font-semibold text-gray-200 font-mono">PRIORITIZED RISK REGISTER & POAM ROADMAP</h3>
+                    <p class="text-xs text-gray-500 mt-0.5">Scored using standard Risk Matrix (Likelihood × Impact) mapped to EU DORA & ISO 27001</p>
+                </div>
+            </div>
+
+            <div class="mt-4 overflow-x-auto">
+                <table class="w-full text-left text-xs font-mono">
+                    <thead class="text-gray-400 bg-gray-900/50 uppercase border-b border-gray-800">
+                        <tr>
+                            <th class="py-2.5 px-3">Control ID</th>
+                            <th class="py-2.5 px-3">Title</th>
+                            <th class="py-2.5 px-3">Severity</th>
+                            <th class="py-2.5 px-3">Score</th>
+                            <th class="py-2.5 px-3">Maturity Gap</th>
+                            <th class="py-2.5 px-3">Remediation Initiative</th>
+                            <th class="py-2.5 px-3">Owner</th>
+                            <th class="py-2.5 px-3">Budget</th>
+                            <th class="py-2.5 px-3">Timeline</th>
+                        </tr>
+                    </thead>
+                    <tbody id="risk-table-body" class="divide-y divide-gray-800/60 text-gray-300">
+                        <tr>
+                            <td colspan="9" class="py-6 text-center text-gray-500">Loading assessment telemetry...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        async function loadAssessment() {
+            try {
+                const res = await fetch('/api/assessment');
+                const data = await res.json();
+
+                // Update Metrics
+                document.getElementById('metric-current').textContent = `Tier ${data.overall_maturity.current_score}`;
+                document.getElementById('metric-target').textContent = `Tier ${data.overall_maturity.target_score}`;
+                document.getElementById('metric-gap').textContent = `+${data.overall_maturity.overall_gap} Tiers`;
+                document.getElementById('metric-budget').textContent = `€${data.overall_maturity.total_remediation_budget_eur.toLocaleString()}`;
+
+                // Radar Chart
+                const fns = Object.keys(data.function_scores);
+                const labels = fns.map(k => data.function_scores[k].name);
+                const currentTiers = fns.map(k => data.function_scores[k].current_tier);
+                const targetTiers = fns.map(k => data.function_scores[k].target_tier);
+
+                const ctxRadar = document.getElementById('radarChart').getContext('2d');
+                new Chart(ctxRadar, {
+                    type: 'radar',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Target Tier',
+                                data: targetTiers,
+                                borderColor: '#10b981',
+                                backgroundColor: 'rgba(16, 185, 129, 0.15)',
+                                pointBackgroundColor: '#10b981'
+                            },
+                            {
+                                label: 'Current Tier',
+                                data: currentTiers,
+                                borderColor: '#f59e0b',
+                                backgroundColor: 'rgba(245, 158, 11, 0.15)',
+                                pointBackgroundColor: '#f59e0b'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            r: {
+                                angleLines: { color: '#1f2937' },
+                                grid: { color: '#1f2937' },
+                                pointLabels: { color: '#9ca3af', font: { size: 11, weight: 'bold' } },
+                                ticks: { color: '#6b7280', backdropColor: 'transparent', min: 0, max: 4, stepSize: 1 }
+                            }
+                        },
+                        plugins: { legend: { position: 'bottom', labels: { color: '#d1d5db' } } }
+                    }
+                });
+
+                // Budget Bar Chart
+                const owners = Object.keys(data.poam_by_owner);
+                const costs = owners.map(o => data.poam_by_owner[o]);
+                const ctxBar = document.getElementById('budgetChart').getContext('2d');
+                new Chart(ctxBar, {
+                    type: 'bar',
+                    data: {
+                        labels: owners,
+                        datasets: [{
+                            label: 'Budget (€)',
+                            data: costs,
+                            backgroundColor: '#06b6d4',
+                            borderRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { grid: { color: '#1f2937' }, ticks: { color: '#9ca3af', font: { size: 10 } } },
+                            y: { grid: { color: '#1f2937' }, ticks: { color: '#9ca3af' }, beginAtZero: true }
+                        },
+                        plugins: { legend: { display: false } }
+                    }
+                });
+
+                // Populate Table
+                const tbody = document.getElementById('risk-table-body');
+                tbody.innerHTML = data.ranked_risks.map(r => `
+                    <tr class="hover:bg-gray-800/40">
+                        <td class="py-2 px-3 font-semibold text-cyan-400">${r.id}</td>
+                        <td class="py-2 px-3 text-white font-medium">${r.title}</td>
+                        <td class="py-2 px-3">${renderSeverity(r.severity)}</td>
+                        <td class="py-2 px-3 text-gray-300">${r.risk_score} / 25</td>
+                        <td class="py-2 px-3 text-amber-400 font-bold">+${r.gap_tier}</td>
+                        <td class="py-2 px-3 text-gray-300 max-w-xs truncate">${r.remediation}</td>
+                        <td class="py-2 px-3 text-gray-400">${r.owner}</td>
+                        <td class="py-2 px-3 text-emerald-400 font-semibold">€${r.cost_eur.toLocaleString()}</td>
+                        <td class="py-2 px-3 text-gray-400">${r.target_qtr}</td>
+                    </tr>
+                `).join('');
+
+            } catch(e) {
+                console.error("Failed to fetch assessment data:", e);
+            }
+        }
+
+        function renderSeverity(sev) {
+            switch(sev) {
+                case 'CRITICAL':
+                    return '<span class="px-2 py-0.5 rounded text-[10px] bg-rose-950 text-rose-300 border border-rose-800 font-bold">CRITICAL</span>';
+                case 'HIGH':
+                    return '<span class="px-2 py-0.5 rounded text-[10px] bg-amber-950 text-amber-300 border border-amber-800 font-bold">HIGH</span>';
+                case 'MEDIUM':
+                    return '<span class="px-2 py-0.5 rounded text-[10px] bg-yellow-950 text-yellow-300 border border-yellow-800 font-bold">MEDIUM</span>';
+                default:
+                    return `<span class="px-2 py-0.5 rounded text-[10px] bg-gray-800 text-gray-300">${sev}</span>`;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadAssessment);
+    </script>
+</body>
+</html>

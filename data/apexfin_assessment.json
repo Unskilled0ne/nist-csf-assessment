@@ -1,0 +1,220 @@
+{
+  "organization": {
+    "name": "Apex Financial Technologies S.A.",
+    "industry": "FinTech / Payment Service Provider",
+    "headcount": 210,
+    "regulatory_scope": ["EU DORA", "PCI-DSS v4.0", "GDPR", "ISO 27001:2022"],
+    "assessment_date": "2026-09-06",
+    "lead_auditor": "Vasilis Tsiamouras",
+    "audit_scope": "Enterprise Hybrid AWS Cloud & Corporate Infrastructure"
+  },
+  "controls": [
+    {
+      "function_id": "GV",
+      "category_id": "GV.OC",
+      "name": "Organizational Context",
+      "subcategories": [
+        {
+          "id": "GV.OC-01",
+          "title": "Organizational Mission & Regulatory Stakeholders",
+          "description": "The organizational mission is understood and informs cybersecurity risk management.",
+          "current_tier": 2.5,
+          "target_tier": 3.5,
+          "evidence": "Business strategy defines growth targets, but cybersecurity risk appetite is not formalized in board charter.",
+          "gap": "Lack of quantified risk appetite metrics (e.g. Value-at-Risk) reviewed by Board of Directors.",
+          "likelihood": 3,
+          "impact": 3,
+          "remediation": "Establish a Board-level Cybersecurity Committee with quarterly review of quantified risk tolerance.",
+          "owner": "CISO / Legal",
+          "estimated_cost_eur": 15000,
+          "target_qtr": "Q4 2026",
+          "compliance_mappings": {"iso27001": "Clause 4.1", "dora": "Article 5"}
+        }
+      ]
+    },
+    {
+      "function_id": "GV",
+      "category_id": "GV.SC",
+      "name": "Supply Chain Risk Management",
+      "subcategories": [
+        {
+          "id": "GV.SC-04",
+          "title": "Third-Party Supplier Due Diligence",
+          "description": "Suppliers and third-party partners are assessed prior to entering into contracts.",
+          "current_tier": 1.5,
+          "target_tier": 3.5,
+          "evidence": "Procurement conducts ad-hoc security questionnaires. No continuous monitoring of SaaS vendor posture.",
+          "gap": "High risk of third-party breach via critical cloud providers without SOC 2 Type II validation.",
+          "likelihood": 4,
+          "impact": 4,
+          "remediation": "Implement an automated Third-Party Risk Management (TPRM) platform and mandate SOC 2 / ISO 27001 for Tier 1 vendors.",
+          "owner": "Head of Procurement / CISO",
+          "estimated_cost_eur": 28000,
+          "target_qtr": "Q1 2027",
+          "compliance_mappings": {"iso27001": "A.5.19", "dora": "Article 28"}
+        }
+      ]
+    },
+    {
+      "function_id": "ID",
+      "category_id": "ID.AM",
+      "name": "Asset Management",
+      "subcategories": [
+        {
+          "id": "ID.AM-01",
+          "title": "Hardware & Virtual Infrastructure Inventory",
+          "description": "Inventories of physical and virtual hardware systems are maintained.",
+          "current_tier": 2.0,
+          "target_tier": 4.0,
+          "evidence": "AWS resources tracked via Terraform, but on-prem endpoints and branch office devices rely on manual spreadsheets.",
+          "gap": "Shadow IT and unmanaged laptops connecting via remote VPN without continuous endpoint discovery.",
+          "likelihood": 4,
+          "impact": 3,
+          "remediation": "Deploy automated Cyber Asset Attack Surface Management (CAASM) agent syncing all assets into CMDB.",
+          "owner": "IT Operations Lead",
+          "estimated_cost_eur": 18000,
+          "target_qtr": "Q4 2026",
+          "compliance_mappings": {"iso27001": "A.8.1", "dora": "Article 8"}
+        }
+      ]
+    },
+    {
+      "function_id": "ID",
+      "category_id": "ID.RA",
+      "name": "Risk Assessment",
+      "subcategories": [
+        {
+          "id": "ID.RA-01",
+          "title": "Vulnerability Identification & Threat Modeling",
+          "description": "Vulnerabilities in assets are identified, validated, and recorded.",
+          "current_tier": 2.5,
+          "target_tier": 3.5,
+          "evidence": "Quarterly external penetration testing performed; internal vulnerability scanning is irregular.",
+          "gap": "Zero automated container image scanning in CI/CD pipeline leading to vulnerable third-party packages in production.",
+          "likelihood": 4,
+          "impact": 4,
+          "remediation": "Integrate automated DevSecOps container security scanner (Trivy/Snyk) into GitLab CI pipeline with build-blocking policy.",
+          "owner": "DevSecOps Lead",
+          "estimated_cost_eur": 12000,
+          "target_qtr": "Q4 2026",
+          "compliance_mappings": {"iso27001": "A.8.8", "dora": "Article 24"}
+        }
+      ]
+    },
+    {
+      "function_id": "PR",
+      "category_id": "PR.AA",
+      "name": "Identity Management & Access Control",
+      "subcategories": [
+        {
+          "id": "PR.AA-01",
+          "title": "Credential & Identity Lifecycle Management",
+          "description": "Identities and credentials for authorized users and services are managed.",
+          "current_tier": 2.0,
+          "target_tier": 4.0,
+          "evidence": "Google Workspace / Okta in place, but legacy administrator accounts exist in AWS without MFA enforcement.",
+          "gap": "CRITICAL: Multiple privileged IAM users have non-expiring access keys and SMS MFA vulnerable to SIM-swapping.",
+          "likelihood": 5,
+          "impact": 5,
+          "remediation": "Enforce FIDO2 / WebAuthn hardware security keys for all privileged access; automate IAM key rotation every 90 days.",
+          "owner": "Cloud Security Architect",
+          "estimated_cost_eur": 22000,
+          "target_qtr": "Q4 2026",
+          "compliance_mappings": {"iso27001": "A.5.15, A.5.17", "dora": "Article 9"}
+        }
+      ]
+    },
+    {
+      "function_id": "PR",
+      "category_id": "PR.DS",
+      "name": "Data Security",
+      "subcategories": [
+        {
+          "id": "PR.DS-01",
+          "title": "Data-at-Rest & In-Transit Protection",
+          "description": "Sensitive data is protected at rest and in transit.",
+          "current_tier": 3.0,
+          "target_tier": 4.0,
+          "evidence": "TLS 1.3 enforced on public APIs; RDS database encrypted with AWS KMS.",
+          "gap": "Lack of Data Loss Prevention (DLP) controls on employee workstations and customer support ticketing exports.",
+          "likelihood": 3,
+          "impact": 4,
+          "remediation": "Deploy endpoint DLP to block unencrypted cardholder data exports; implement automated PII tokenization.",
+          "owner": "Data Protection Officer / SecOps",
+          "estimated_cost_eur": 25000,
+          "target_qtr": "Q1 2027",
+          "compliance_mappings": {"iso27001": "A.8.24", "dora": "Article 9"}
+        }
+      ]
+    },
+    {
+      "function_id": "DE",
+      "category_id": "DE.CM",
+      "name": "Continuous Monitoring",
+      "subcategories": [
+        {
+          "id": "DE.CM-01",
+          "title": "Network & Cloud Telemetry Monitoring",
+          "description": "Networks and computing environments are monitored to detect potential security events.",
+          "current_tier": 2.0,
+          "target_tier": 3.5,
+          "evidence": "AWS CloudWatch and GuardDuty enabled. Centralized SIEM lacks endpoint detection telemetry.",
+          "gap": "No EDR deployed on 40% of macOS/Linux engineer workstations; blind spots in lateral movement detection.",
+          "likelihood": 4,
+          "impact": 4,
+          "remediation": "Deploy enterprise EDR (CrowdStrike/Wazuh) across 100% of workstations and integrate into 24/7 MDR SOC.",
+          "owner": "SOC Lead",
+          "estimated_cost_eur": 35000,
+          "target_qtr": "Q4 2026",
+          "compliance_mappings": {"iso27001": "A.8.16", "dora": "Article 10"}
+        }
+      ]
+    },
+    {
+      "function_id": "RS",
+      "category_id": "RS.MA",
+      "name": "Incident Management",
+      "subcategories": [
+        {
+          "id": "RS.MA-01",
+          "title": "Incident Response Plan & Execution",
+          "description": "The incident response plan is executed in coordination with internal and external stakeholders.",
+          "current_tier": 1.5,
+          "target_tier": 3.5,
+          "evidence": "A generic Incident Response PDF exists from 2023. No tabletop exercises conducted; no SLA defined for regulatory disclosure.",
+          "gap": "High risk of non-compliance with EU DORA strict 4-hour major incident notification requirements.",
+          "likelihood": 4,
+          "impact": 5,
+          "remediation": "Revise IRP with DORA-compliant escalation matrix; conduct bi-annual executive ransomware tabletop simulation.",
+          "owner": "CISO / Incident Commander",
+          "estimated_cost_eur": 16000,
+          "target_qtr": "Q4 2026",
+          "compliance_mappings": {"iso27001": "A.5.24", "dora": "Article 11, 19"}
+        }
+      ]
+    },
+    {
+      "function_id": "RC",
+      "category_id": "RC.RP",
+      "name": "Recovery Plan Execution",
+      "subcategories": [
+        {
+          "id": "RC.RP-01",
+          "title": "Restoration of Core Banking Services",
+          "description": "Recovery activities are performed to restore operations and services.",
+          "current_tier": 2.5,
+          "target_tier": 4.0,
+          "evidence": "Daily automated AWS snapshots taken and replicated to secondary EU region.",
+          "gap": "Backups have not undergone a clean bare-metal restoration drill in the past 12 months; RTO/RPO untested.",
+          "likelihood": 3,
+          "impact": 5,
+          "remediation": "Implement immutable AWS S3 Object Lock for air-gapped ransomware backups and conduct full disaster recovery failover drill.",
+          "owner": "Infrastructure Lead",
+          "estimated_cost_eur": 14000,
+          "target_qtr": "Q1 2027",
+          "compliance_mappings": {"iso27001": "A.8.14", "dora": "Article 12"}
+        }
+      ]
+    }
+  ]
+}
