@@ -49,7 +49,6 @@ def print_cli_summary(analysis: dict):
         border_style="blue"
     ))
 
-    # Overall Metrics Table
     m_table = Table(title="Enterprise Cybersecurity Maturity Overview", border_style="dim")
     m_table.add_column("Metric", style="bold white")
     m_table.add_column("Value", justify="center", style="bold cyan")
@@ -61,7 +60,6 @@ def print_cli_summary(analysis: dict):
     m_table.add_row("Total Remediation Budget", f"€{mat['total_remediation_budget_eur']:,}", "Capital expenditure across Q4 2026 - Q1 2027")
     console.print(m_table)
 
-    # Function Breakdown Table
     f_table = Table(title="NIST CSF 2.0 Core Functions Breakdown", border_style="dim")
     f_table.add_column("Function", style="bold white")
     f_table.add_column("Current Tier", justify="center", style="yellow")
@@ -74,7 +72,6 @@ def print_cli_summary(analysis: dict):
         f_table.add_row(f"{fn} - {d['name']}", str(d["current_tier"]), str(d["target_tier"]), f"+{d['gap']}", status)
     console.print(f_table)
 
-    # Top Ranked Risks Table
     r_table = Table(title="Top Prioritized Enterprise Risks (Likelihood × Impact)", border_style="dim")
     r_table.add_column("ID", style="bold cyan")
     r_table.add_column("Initiative", style="bold white")

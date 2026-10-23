@@ -36,7 +36,6 @@ class GRCAnalyzer:
                 function_metrics[fn]["target_sum"] += tgt
                 function_metrics[fn]["count"] += 1
 
-                # Risk calculation (Likelihood x Impact)
                 likelihood = sub.get("likelihood", 3)
                 impact = sub.get("impact", 3)
                 risk_score = likelihood * impact
@@ -82,7 +81,6 @@ class GRCAnalyzer:
                 }
                 all_subcategories.append(item)
 
-        # Calculate function maturity averages
         function_scores = {}
         overall_curr_sum = 0.0
         overall_tgt_sum = 0.0
@@ -115,7 +113,6 @@ class GRCAnalyzer:
             "total_remediation_budget_eur": total_budget
         }
 
-        # Sort risks by highest severity first
         sorted_risks = sorted(all_subcategories, key=lambda x: x["risk_score"], reverse=True)
 
         return {

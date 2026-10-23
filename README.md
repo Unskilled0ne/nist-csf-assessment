@@ -128,7 +128,7 @@ nist-csf-assessment/
 ### 1. Installation
 
 ```bash
-git clone https://github.com/your-username/nist-csf-assessment.git
+git clone https://github.com/Unskilled0ne/nist-csf-assessment.git
 cd nist-csf-assessment
 
 python3 -m venv venv
